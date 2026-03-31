@@ -1,6 +1,6 @@
 {
   "name": "ollama-mcp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "VRAM-aware MCP server that offloads token-heavy tasks to local Ollama models",
   "main": "index.js",
   "type": "module",
