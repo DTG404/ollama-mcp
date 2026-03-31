@@ -18,6 +18,7 @@ import { registerExplainCode } from "./lib/tools/explain-code.js";
 import { registerGenerateReadme } from "./lib/tools/generate-readme.js";
 import { registerReviewCode } from "./lib/tools/review-code.js";
 import { registerRefactorCode } from "./lib/tools/refactor-code.js";
+import { registerGenerateChangelog } from "./lib/tools/generate-changelog.js";
 
 const config = await loadConfig();
 const ollama = new OllamaClient(config.ollama.host, config.ollama.timeoutMs);
@@ -51,6 +52,7 @@ registerExplainCode(server, ollama, vramManager, config);
 registerGenerateReadme(server, ollama, vramManager, config);
 registerReviewCode(server, ollama, vramManager, config);
 registerRefactorCode(server, ollama, vramManager, config);
+registerGenerateChangelog(server, ollama, vramManager, config);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);

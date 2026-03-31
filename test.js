@@ -414,6 +414,28 @@ try {
   assert(false, "refactor_code: returns refactored code", e.message);
 }
 
+// ── generate_changelog ───────────────────────────────────────────────────────
+console.log(Y("\ngenerate_changelog"));
+const commitLog = `feat: add user authentication with JWT
+fix: resolve race condition in session cleanup
+docs: update API reference for /auth endpoints
+refactor: extract token validation into middleware
+feat: add password reset flow
+fix: handle expired tokens gracefully
+chore: bump jsonwebtoken to 9.0.2`;
+try {
+  const res = await client.tool("generate_changelog", { commits: commitLog });
+  const text = getText(res);
+  const hasSection = text.includes("##") || text.toLowerCase().includes("feature") || text.toLowerCase().includes("fix");
+  assert(
+    !isError(res) && hasSection,
+    "generate_changelog: returns grouped changelog",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "generate_changelog: returns grouped changelog", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
