@@ -303,6 +303,20 @@ try {
   assert(false, "triage_issues: returns results for code with potential null error", e.message);
 }
 
+// ── reload_config ────────────────────────────────────────────────────────────
+console.log(Y("\nreload_config"));
+try {
+  const res = await client.tool("reload_config");
+  const text = getText(res);
+  assert(
+    !isError(res) && text.includes("reloaded"),
+    "reload_config: returns confirmation with 'reloaded'",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "reload_config: returns confirmation with 'reloaded'", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
