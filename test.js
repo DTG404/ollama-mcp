@@ -391,6 +391,29 @@ try {
   assert(false, "review_code: returns substantive review feedback", e.message);
 }
 
+// ── refactor_code ────────────────────────────────────────────────────────────
+console.log(Y("\nrefactor_code"));
+const codeToRefactor = `function calc(a,b,c) {
+  const x = a * b;
+  const y = x + c;
+  const z = y / 2;
+  return z;
+}`;
+try {
+  const res = await client.tool("refactor_code", {
+    code: codeToRefactor,
+    instruction: "Rename variables to be descriptive and add JSDoc",
+  });
+  const text = getText(res);
+  assert(
+    !isError(res) && text.trim().length > 20,
+    "refactor_code: returns refactored code",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "refactor_code: returns refactored code", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
