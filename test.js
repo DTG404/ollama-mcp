@@ -436,6 +436,41 @@ try {
   assert(false, "generate_changelog: returns grouped changelog", e.message);
 }
 
+// ── batch_content ────────────────────────────────────────────────────────────
+console.log(Y("\nbatch_content"));
+const batchTemplate = `# {{title}}
+
+## Overview
+A lesson about {{topic}}.
+
+## Learning Objectives
+- Understand {{topic}} fundamentals
+- Apply {{topic}} in practice
+
+## Content
+Write a concise lesson about {{topic}} for {{audience}}.`;
+
+const batchVariations = JSON.stringify([
+  { title: "Variables", topic: "Python variables", audience: "beginners" },
+  { title: "Loops", topic: "Python for/while loops", audience: "beginners" },
+]);
+try {
+  const res = await client.tool("batch_content", {
+    template: batchTemplate,
+    variations: batchVariations,
+    instruction: "Fill in the template for each variation. Write 2-3 sentences for the Content section.",
+  });
+  const text = getText(res);
+  const hasMultiple = text.includes("Variables") && text.includes("Loops");
+  assert(
+    !isError(res) && hasMultiple,
+    "batch_content: returns content for both variations",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "batch_content: returns content for both variations", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 

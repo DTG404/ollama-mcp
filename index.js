@@ -19,6 +19,7 @@ import { registerGenerateReadme } from "./lib/tools/generate-readme.js";
 import { registerReviewCode } from "./lib/tools/review-code.js";
 import { registerRefactorCode } from "./lib/tools/refactor-code.js";
 import { registerGenerateChangelog } from "./lib/tools/generate-changelog.js";
+import { registerBatchContent } from "./lib/tools/batch-content.js";
 
 const config = await loadConfig();
 const ollama = new OllamaClient(config.ollama.host, config.ollama.timeoutMs);
@@ -53,6 +54,7 @@ registerGenerateReadme(server, ollama, vramManager, config);
 registerReviewCode(server, ollama, vramManager, config);
 registerRefactorCode(server, ollama, vramManager, config);
 registerGenerateChangelog(server, ollama, vramManager, config);
+registerBatchContent(server, ollama, vramManager, config);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);
