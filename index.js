@@ -15,6 +15,7 @@ import { registerCheckUpdates } from "./lib/tools/check-updates.js";
 import { registerGetConfig } from "./lib/tools/get-config.js";
 import { registerReloadConfig } from "./lib/tools/reload-config.js";
 import { registerExplainCode } from "./lib/tools/explain-code.js";
+import { registerGenerateReadme } from "./lib/tools/generate-readme.js";
 
 const config = await loadConfig();
 const ollama = new OllamaClient(config.ollama.host, config.ollama.timeoutMs);
@@ -45,6 +46,7 @@ registerCheckUpdates(server, ollama);
 registerGetConfig(server, config);
 registerReloadConfig(server, config);
 registerExplainCode(server, ollama, vramManager, config);
+registerGenerateReadme(server, ollama, vramManager, config);
 
 const transport = new StdioServerTransport();
 await server.connect(transport);

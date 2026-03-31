@@ -340,6 +340,35 @@ try {
   assert(false, "explain_code: returns a substantive explanation", e.message);
 }
 
+// ── generate_readme ──────────────────────────────────────────────────────────
+console.log(Y("\ngenerate_readme"));
+const projectInfo = `Project: my-cli-tool
+package.json: {"name":"my-cli-tool","version":"1.0.0","description":"A CLI for managing tasks","scripts":{"start":"node index.js","test":"node test.js"},"dependencies":{"commander":"^12.0.0"}}
+Directory tree:
+src/
+  index.js
+  commands/
+    add.js
+    list.js
+    remove.js
+  utils/
+    storage.js
+test/
+  commands.test.js`;
+try {
+  const res = await client.tool("generate_readme", { project_info: projectInfo });
+  const text = getText(res);
+  const hasTitle = text.includes("#");
+  const hasInstall = text.toLowerCase().includes("install");
+  assert(
+    !isError(res) && hasTitle && hasInstall,
+    "generate_readme: returns markdown with title and install section",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "generate_readme: returns markdown with title and install section", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
