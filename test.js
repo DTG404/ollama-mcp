@@ -317,6 +317,29 @@ try {
   assert(false, "reload_config: returns confirmation with 'reloaded'", e.message);
 }
 
+// ── explain_code ─────────────────────────────────────────────────────────────
+console.log(Y("\nexplain_code"));
+const codeToExplain = `export class VramManager {
+  constructor(ollama, vramConfig) {
+    this.ollama = ollama;
+    this.bufferBytes = vramConfig.bufferMb * 1024 * 1024;
+    this.cacheTtlMs = vramConfig.cacheTtlMs;
+    this._cache = null;
+    this._cacheTime = 0;
+  }
+}`;
+try {
+  const res = await client.tool("explain_code", { code: codeToExplain });
+  const text = getText(res);
+  assert(
+    !isError(res) && text.trim().length > 50,
+    "explain_code: returns a substantive explanation",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "explain_code: returns a substantive explanation", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
