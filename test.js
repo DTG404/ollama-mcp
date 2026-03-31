@@ -369,6 +369,28 @@ try {
   assert(false, "generate_readme: returns markdown with title and install section", e.message);
 }
 
+// ── review_code ──────────────────────────────────────────────────────────────
+console.log(Y("\nreview_code"));
+const codeToReview = `function processUsers(users) {
+  let result = [];
+  for (let i = 0; i <= users.length; i++) {
+    const user = users[i];
+    result.push(user.name.toUpperCase());
+  }
+  return result;
+}`;
+try {
+  const res = await client.tool("review_code", { code: codeToReview });
+  const text = getText(res);
+  assert(
+    !isError(res) && text.trim().length > 50,
+    "review_code: returns substantive review feedback",
+    text.slice(0, 120)
+  );
+} catch (e) {
+  assert(false, "review_code: returns substantive review feedback", e.message);
+}
+
 // ─── Cleanup & Report ─────────────────────────────────────────────────────────
 await client.stop();
 
